@@ -15,7 +15,7 @@
 
   "content_scripts": [
     {
-      "matches": [ "*://www.google.com/search?tbm=fin*" ],
+      "matches": [ "*://www.google.com/search?*tbm=fin*" ],
       "js": [ "stock-quote-hub.js" ]
     }
   ]
