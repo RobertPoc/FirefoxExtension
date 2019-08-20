@@ -19,7 +19,7 @@ if (quote !== "") {
     /* Append HTML to page content */
     document.body.appendChild(div);
     /* Set container attributes */
-    div.setAttribute("style", "position: absolute; top: 0px; left: 0px; z-index: 999; border:1px solid #CCC; padding: 5px 0px 5px 5px; margin: 5px;");
+    div.setAttribute("style", "position: fixed; top: 75px; left: 0px; z-index: 999; border:1px solid #CCC; padding: 5px 0px 5px 5px; margin: 5px;");
 }
 
 /* Create link to another source/site */
@@ -29,6 +29,7 @@ function createHub(href, icon) {
 
     link.setAttribute("target", "_blank");
     link.setAttribute("href", href);
+    link.setAttribute("href", "display: block;");
     img.setAttribute("src", icon);
     img.setAttribute("style", "padding-right: 5px;");
     link.appendChild(img);
