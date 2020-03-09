@@ -4,7 +4,10 @@
       "matches": [
         "*://www.betexplorer.com/hockey/czech-republic/extraliga*/results/?stage=*",
         "*://www.betexplorer.com/hockey/usa/nhl*/results/?month=*",
-        "*://www.betexplorer.com/hockey/usa/nhl*/results/?stage=*"
+        "*://www.betexplorer.com/hockey/usa/nhl*/results/?stage=*",
+        "*://www.betexplorer.com/hockey/russia/khl*/results/?stage=*",
+        "*://www.betexplorer.com/hockey/sweden/shl*/results/?stage=*",
+        "*://www.betexplorer.com/hockey/finland/liiga*/results/?stage=*"
       ],
       "js": [
         "jquery.js",
@@ -25,5 +28,5 @@
   },
   "manifest_version": 2,
   "name": "BetExplorer Data Mining",
-  "version": "0.2"
+  "version": "1.4"
 }

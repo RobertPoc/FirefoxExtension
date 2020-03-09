@@ -18,10 +18,22 @@ if (url.indexOf('hockey') > 0) {
     if (url.indexOf('nhl') > 0) {
         league = 'nhl';
     }
+    if (url.indexOf('khl') > 0) {
+        league = 'khl';
+    }
+    if (url.indexOf('shl') > 0) {
+        league = 'shl';
+    }
+    if (url.indexOf('liiga') > 0) {
+        league = 'liiga';
+    }
 }
 /* Soccer */
 if (url.indexOf('soccer') > 0) {
     sport = 'soccer';
+    if (url.indexOf('1-liga') > 0) {
+        league = "1-liga";
+    }
 }
 /* Basketball */
 if (url.indexOf('basketball') > 0) {
@@ -61,16 +73,30 @@ function createImport(icon, sport) {
                     case "nhl":
                         nhl();
                         break;
+                    case "khl":
+                        khl();
+                        break;
+                    case "shl":
+                        shl();
+                        break;
+                    case "liiga":
+                        liiga();
+                        break;
                 }
                 break;
             case "soccer":
+                switch (league) {
+                    case "1-liga":
+                        czliga();
+                        break;
+                }
                 break;
         }
     }
     link.appendChild(img);
     return link;
 }
-
+/* Hockey, Extraliga */
 function extraliga() {
     try {
         let soutez = $('.wrap-section__header__select > select > option:selected').text();
@@ -140,7 +166,7 @@ function extraliga() {
         console.log(err.message);
     }
 }
-
+/* Hockey, NHL */
 function nhl() {
     try {
         let soutez = $('.wrap-section__header__select > select > option:selected').text();
@@ -211,8 +237,285 @@ function nhl() {
         console.log(err.message);
     }
 }
+/* Hockey, KHL */
+function khl() {
+    try {
+        let soutez = $('.wrap-section__header__select > select > option:selected').text();
+        if (soutez == '' || soutez == undefined) {
+            console.log("Nelze naèíst informaci SOUTEZ");
+            return;
+        }
+        soutez = "KHL " + soutez;
+        $('.table-main > tbody > tr').each(function () {
+            let zapas = $(this).find('.in-match').text();
+            if (zapas !== '') {
+                let domaci = zapas.split('-')[0].trim();
+                let hoste = zapas.split('-')[1].trim();
 
+                let skore = $(this).find('.h-text-center').text();
 
+                let prodlouzeni = 0;
+                let najezdy = 0;
+                if (skore.indexOf('ET') != -1) {
+                    prodlouzeni = 1;
+                    skore = skore.replace('ET', '');
+                }
+                if (skore.indexOf('pen.') != -1) {
+                    prodlouzeni = 1;
+                    najezdy = 1;
+                    skore = skore.replace('pen.', '');
+                }
+
+                let sDomaci = skore.split(':')[0].trim();
+                let sHoste = skore.split(':')[1].trim();
+
+                let d = $($(this).find('.table-main__odds')[0]).text();
+                let r = $($(this).find('.table-main__odds')[1]).text();
+                let h = $($(this).find('.table-main__odds')[2]).text();
+                if (d == '') { d = 1; }
+                if (r == '') { r = 1; }
+                if (h == '') { h = 1; }
+
+                let textDatum = $(this).find('.h-text-right').text();
+                if (textDatum.toString().toLowerCase() == 'today') {
+                    textDatum = new Date().getDate() + '.' + (new Date().getMonth() + 1) + '.' + new Date().getFullYear();
+                }
+                if (textDatum.toString().toLowerCase() == 'yesterday') {
+                    textDatum = new Date(new Date().setDate(new Date().getDate() - 1)).getDate() + '.' + (new Date(new Date().setDate(new Date().getDate() - 1)).getMonth() + 1) + '.' + new Date(new Date().setDate(new Date().getDate() - 1)).getFullYear();
+                }
+                let datum = textDatum.split('.');
+                let sqlDate = datum[1] + '/' + datum[0];
+                let rok = new Date().getFullYear();
+                if (datum.length == 3 && datum[2] != '') {
+                    rok = datum[2];
+                }
+                sqlDate = sqlDate + '/' + rok;
+
+                let mssql = 'DECLARE @id bigint\n';
+                mssql = mssql + "SET @id = (SELECT TOP 1 zapas.zapasId FROM zapas WHERE zapas.domaci = '" + domaci + "' AND zapas.hoste = '" + hoste + "' AND zapas.datum = '" + sqlDate + "')\n";
+                mssql = mssql + "IF @id IS NULL \nBEGIN\n";
+                mssql = mssql + "INSERT INTO zapas(datum, domaci, hoste, kurz1, kurz0, kurz2, skoreDomaci, skoreHoste, prodlouzeni, najezdy, soutez, kolo) values('" + sqlDate + "', '" + domaci + "', '" + hoste + "', " + d + ", " + r + ", " + h + ", " + sDomaci + ", " + sHoste + ", " + prodlouzeni + ", " + najezdy + ", '" + soutez + "', '')\n";
+                mssql = mssql + "END\n";
+
+                mssql = btoa(mssql);
+                matchCount++;
+                sendData(mssql);
+                return;
+            }
+        });
+    }
+    catch (err) {
+        console.log(err.message);
+    }
+}
+/* Hockey, Sweden */
+function shl() {
+    try {
+        let soutez = $('.wrap-section__header__select > select > option:selected').text();
+        if (soutez == '' || soutez == undefined) {
+            console.log("Nelze naèíst informaci SOUTEZ");
+            return;
+        }
+        soutez = "SHL " + soutez;
+        let kolo;
+        $('.table-main > tbody > tr').each(function () {
+            let tKolo = $(this).find('th.h-text-left').text();
+            if (tKolo.indexOf('. Round') != -1) {
+                tKolo = tKolo.replace('. Round', '');
+                kolo = tKolo;
+            }
+            let zapas = $(this).find('.in-match').text();
+            if (zapas !== '') {
+                let domaci = zapas.split('-')[0].trim();
+                let hoste = zapas.split('-')[1].trim();
+
+                let skore = $(this).find('.h-text-center').text();
+
+                let prodlouzeni = 0;
+                let najezdy = 0;
+                if (skore.indexOf('ET') != -1) {
+                    prodlouzeni = 1;
+                    skore = skore.replace('ET', '');
+                }
+                if (skore.indexOf('pen.') != -1) {
+                    prodlouzeni = 1;
+                    najezdy = 1;
+                    skore = skore.replace('pen.', '');
+                }
+
+                let sDomaci = skore.split(':')[0].trim();
+                let sHoste = skore.split(':')[1].trim();
+
+                let d = $($(this).find('.table-main__odds')[0]).text();
+                let r = $($(this).find('.table-main__odds')[1]).text();
+                let h = $($(this).find('.table-main__odds')[2]).text();
+                if (d == '') { d = 1; }
+                if (r == '') { r = 1; }
+                if (h == '') { h = 1; }
+
+                let datum = $(this).find('.h-text-right').text().split('.');
+                let sqlDate = datum[1] + '/' + datum[0];
+                let rok = new Date().getFullYear();
+                if (datum.length == 3 && datum[2] != '') {
+                    rok = datum[2];
+                }
+                sqlDate = sqlDate + '/' + rok;
+
+                let mssql = 'DECLARE @id bigint\n';
+                mssql = mssql + "SET @id = (SELECT TOP 1 zapas.zapasId FROM zapas WHERE zapas.domaci = '" + domaci + "' AND zapas.hoste = '" + hoste + "' AND zapas.datum = '" + sqlDate + "')\n";
+                mssql = mssql + "IF @id IS NULL \nBEGIN\n";
+                mssql = mssql + "INSERT INTO zapas(datum, domaci, hoste, kurz1, kurz0, kurz2, skoreDomaci, skoreHoste, prodlouzeni, najezdy, soutez, kolo) values('" + sqlDate + "', '" + domaci + "', '" + hoste + "', " + d + ", " + r + ", " + h + ", " + sDomaci + ", " + sHoste + ", " + prodlouzeni + ", " + najezdy + ", '" + soutez + "', '" + kolo + "')\n";
+                mssql = mssql + "END\n";
+
+                mssql = btoa(mssql);
+                matchCount++;
+                sendData(mssql);
+                return;
+            }
+        });
+    }
+    catch (err) {
+        console.log(err.message);
+    }
+}
+/* Hockey, Finland */
+function liiga() {
+    try {
+        let soutez = $('.wrap-section__header__select > select > option:selected').text();
+        if (soutez == '' || soutez == undefined) {
+            console.log("Nelze naèíst informaci SOUTEZ");
+            return;
+        }
+        soutez = "Liiga " + soutez;
+        $('.table-main > tbody > tr').each(function () {
+            let zapas = $(this).find('.in-match').text();
+            if (zapas !== '') {
+                let domaci = zapas.split('-')[0].trim();
+                let hoste = zapas.split('-')[1].trim();
+
+                let skore = $(this).find('.h-text-center').text();
+
+                let prodlouzeni = 0;
+                let najezdy = 0;
+                if (skore.indexOf('ET') != -1) {
+                    prodlouzeni = 1;
+                    skore = skore.replace('ET', '');
+                }
+                if (skore.indexOf('pen.') != -1) {
+                    prodlouzeni = 1;
+                    najezdy = 1;
+                    skore = skore.replace('pen.', '');
+                }
+
+                let sDomaci = skore.split(':')[0].trim();
+                let sHoste = skore.split(':')[1].trim();
+
+                let d = $($(this).find('.table-main__odds')[0]).text();
+                let r = $($(this).find('.table-main__odds')[1]).text();
+                let h = $($(this).find('.table-main__odds')[2]).text();
+                if (d == '') { d = 1; }
+                if (r == '') { r = 1; }
+                if (h == '') { h = 1; }
+
+                let textDatum = $(this).find('.h-text-right').text();
+                if (textDatum.toString().toLowerCase() == 'today') {
+                    textDatum = new Date().getDate() + '.' + (new Date().getMonth() + 1) + '.' + new Date().getFullYear();
+                }
+                if (textDatum.toString().toLowerCase() == 'yesterday') {
+                    textDatum = new Date(new Date().setDate(new Date().getDate() - 1)).getDate() + '.' + (new Date(new Date().setDate(new Date().getDate() - 1)).getMonth() + 1) + '.' + new Date(new Date().setDate(new Date().getDate() - 1)).getFullYear();
+                }
+                let datum = textDatum.split('.');
+                let sqlDate = datum[1] + '/' + datum[0];
+                let rok = new Date().getFullYear();
+                if (datum.length == 3 && datum[2] != '') {
+                    rok = datum[2];
+                }
+                sqlDate = sqlDate + '/' + rok;
+
+                let mssql = 'DECLARE @id bigint\n';
+                mssql = mssql + "SET @id = (SELECT TOP 1 zapas.zapasId FROM zapas WHERE zapas.domaci = '" + domaci + "' AND zapas.hoste = '" + hoste + "' AND zapas.datum = '" + sqlDate + "')\n";
+                mssql = mssql + "IF @id IS NULL \nBEGIN\n";
+                mssql = mssql + "INSERT INTO zapas(datum, domaci, hoste, kurz1, kurz0, kurz2, skoreDomaci, skoreHoste, prodlouzeni, najezdy, soutez, kolo) values('" + sqlDate + "', '" + domaci + "', '" + hoste + "', " + d + ", " + r + ", " + h + ", " + sDomaci + ", " + sHoste + ", " + prodlouzeni + ", " + najezdy + ", '" + soutez + "', '')\n";
+                mssql = mssql + "END\n";
+
+                mssql = btoa(mssql);
+                matchCount++;
+                sendData(mssql);
+                return;
+            }
+        });
+    }
+    catch (err) {
+        console.log(err.message);
+    }
+}
+/* Soccer, 1.Liga - CZ */
+function czliga() {
+    try {
+        let soutez = $('.wrap-section__header__select > select > option:selected').text();
+        if (soutez == '' || soutez == undefined) {
+            console.log("Nelze naèíst informaci SOUTEZ");
+            return;
+        }
+        soutez = "1.liga " + soutez;
+        let kolo;
+        $('.table-main > tbody > tr').each(function () {
+            let tKolo = $(this).find('th.h-text-left').text();
+            if (tKolo.indexOf('. Round') != -1) {
+                tKolo = tKolo.replace('. Round', '');
+                kolo = tKolo;
+            }
+            let zapas = $(this).find('.in-match').text();
+            if (zapas !== '') {
+                let domaci = zapas.split('-')[0].trim();
+                let hoste = zapas.split('-')[1].trim();
+
+                let skore = $(this).find('.h-text-center').text();
+
+                let sDomaci = skore.split(':')[0].trim();
+                let sHoste = skore.split(':')[1].trim();
+
+                let d = $($(this).find('.table-main__odds')[0]).text();
+                let r = $($(this).find('.table-main__odds')[1]).text();
+                let h = $($(this).find('.table-main__odds')[2]).text();
+                if (d == '') { d = 1; }
+                if (r == '') { r = 1; }
+                if (h == '') { h = 1; }
+
+                let textDatum = $(this).find('.h-text-right').text();
+                if (textDatum.toString().toLowerCase() == 'today') {
+                    textDatum = new Date().getDate() + '.' + (new Date().getMonth() + 1) + '.' + new Date().getFullYear();
+                }
+                if (textDatum.toString().toLowerCase() == 'yesterday') {
+                    textDatum = new Date(new Date().setDate(new Date().getDate() - 1)).getDate() + '.' + (new Date(new Date().setDate(new Date().getDate() - 1)).getMonth() + 1) + '.' + new Date(new Date().setDate(new Date().getDate() - 1)).getFullYear();
+                }
+                let datum = textDatum.split('.');
+                let sqlDate = datum[1] + '/' + datum[0];
+                let rok = new Date().getFullYear();
+                if (datum.length == 3 && datum[2] != '') {
+                    rok = datum[2];
+                }
+                sqlDate = sqlDate + '/' + rok;
+
+                let mssql = 'DECLARE @id bigint\n';
+                mssql = mssql + "SET @id = (SELECT TOP 1 zapas.zapasId FROM zapas WHERE zapas.domaci = '" + domaci + "' AND zapas.hoste = '" + hoste + "' AND zapas.datum = '" + sqlDate + "')\n";
+                mssql = mssql + "IF @id IS NULL \nBEGIN\n";
+                mssql = mssql + "INSERT INTO zapas(datum, domaci, hoste, kurz1, kurz0, kurz2, skoreDomaci, skoreHoste, soutez, kolo) values('" + sqlDate + "', '" + domaci + "', '" + hoste + "', " + d + ", " + r + ", " + h + ", " + sDomaci + ", " + sHoste + ", " + soutez + "', '" + kolo + "')\n";
+                mssql = mssql + "END\n";
+
+                mssql = btoa(mssql);
+                matchCount++;
+                sendData(mssql);
+                return;
+            }
+        });
+    }
+    catch (err) {
+        console.log(err.message);
+    }
+}
+
+/* Send data to server */
 function sendData(sqlCommand) {
     try {
         var request = new XMLHttpRequest();
