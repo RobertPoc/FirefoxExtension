@@ -21,7 +21,7 @@ if (url.indexOf('hockey') > 0) {
     if (url.indexOf('khl') > 0) {
         league = 'khl';
     }
-    if (url.indexOf('shl') > 0) {
+    if (url.indexOf('shl') > 0 || url.indexOf('elitserien') > 0) {
         league = 'shl';
     }
     if (url.indexOf('liiga') > 0) {
@@ -31,7 +31,7 @@ if (url.indexOf('hockey') > 0) {
 /* Soccer */
 if (url.indexOf('soccer') > 0) {
     sport = 'soccer';
-    if (url.indexOf('1-liga') > 0) {
+    if (url.indexOf('1-liga') > 0 || url.indexOf('synot-liga') > 0 || url.indexOf('gambrinus-liga') > 0) {
         league = "1-liga";
     }
 }
@@ -253,7 +253,9 @@ function khl() {
                 let hoste = zapas.split('-')[1].trim();
 
                 let skore = $(this).find('.h-text-center').text();
-
+                if (skore == 'CAN.') {
+                    return;
+                }
                 let prodlouzeni = 0;
                 let najezdy = 0;
                 if (skore.indexOf('ET') != -1) {
@@ -500,7 +502,7 @@ function czliga() {
                 let mssql = 'DECLARE @id bigint\n';
                 mssql = mssql + "SET @id = (SELECT TOP 1 zapas.zapasId FROM zapas WHERE zapas.domaci = '" + domaci + "' AND zapas.hoste = '" + hoste + "' AND zapas.datum = '" + sqlDate + "')\n";
                 mssql = mssql + "IF @id IS NULL \nBEGIN\n";
-                mssql = mssql + "INSERT INTO zapas(datum, domaci, hoste, kurz1, kurz0, kurz2, skoreDomaci, skoreHoste, soutez, kolo) values('" + sqlDate + "', '" + domaci + "', '" + hoste + "', " + d + ", " + r + ", " + h + ", " + sDomaci + ", " + sHoste + ", " + soutez + "', '" + kolo + "')\n";
+                mssql = mssql + "INSERT INTO zapas(datum, domaci, hoste, kurz1, kurz0, kurz2, skoreDomaci, skoreHoste, soutez, kolo) values('" + sqlDate + "', '" + domaci + "', '" + hoste + "', " + d + ", " + r + ", " + h + ", " + sDomaci + ", " + sHoste + ", '" + soutez + "', '" + kolo + "')\n";
                 mssql = mssql + "END\n";
 
                 mssql = btoa(mssql);

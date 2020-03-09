@@ -6,8 +6,15 @@
         "*://www.betexplorer.com/hockey/usa/nhl*/results/?month=*",
         "*://www.betexplorer.com/hockey/usa/nhl*/results/?stage=*",
         "*://www.betexplorer.com/hockey/russia/khl*/results/?stage=*",
-        "*://www.betexplorer.com/hockey/sweden/shl*/results/?stage=*",
-        "*://www.betexplorer.com/hockey/finland/liiga*/results/?stage=*"
+        "*://www.betexplorer.com/hockey/sweden/shl*/results/*",
+        "*://www.betexplorer.com/hockey/sweden/elitserien*/results/?stage=*",
+        "*://www.betexplorer.com/hockey/finland/liiga/results/*",
+        "*://www.betexplorer.com/hockey/finland/liiga*/results/?stage=*",
+        "*://www.betexplorer.com/hockey/finland/sm-liiga*/results/?stage=*",
+        "*://www.betexplorer.com/soccer/czech-republic/1-liga/results/",
+        "*://www.betexplorer.com/soccer/czech-republic/1-liga*/results/*",
+        "*://www.betexplorer.com/soccer/czech-republic/synot-liga*/results/*",
+        "*://www.betexplorer.com/soccer/czech-republic/gambrinus-liga*/results/*"
       ],
       "js": [
         "jquery.js",
