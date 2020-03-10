@@ -2,7 +2,9 @@
 var icon = '';
 var sport = '';
 var league = '';
-var serviceUrl = "https://localhost:44394/api/match/add";
+//var serviceUrl = "https://localhost:44394/api/match/add";
+var serviceUrl = "http://localhost:57718/api/match/add";
+
 var matchCount = 0;
 var matchProcessed = 0;
 var matchError = 0;
