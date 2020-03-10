@@ -16,7 +16,15 @@
         "*://www.betexplorer.com/soccer/czech-republic/synot-liga*/results/*",
         "*://www.betexplorer.com/soccer/czech-republic/gambrinus-liga*/results/*",
         "*://www.betexplorer.com/soccer/england/premier-league/results/",
-        "*://www.betexplorer.com/soccer/england/premier-league*/results/"
+        "*://www.betexplorer.com/soccer/england/premier-league*/results/",
+        "*://www.betexplorer.com/soccer/germany/bundesliga/results/",
+        "*://www.betexplorer.com/soccer/germany/bundesliga*/results/",
+        "*://www.betexplorer.com/soccer/italy/serie-a/results/",
+        "*://www.betexplorer.com/soccer/italy/serie-a*/results/",
+        "*://www.betexplorer.com/soccer/france/ligue-1/results/",
+        "*://www.betexplorer.com/soccer/france/ligue-1*/results/",
+        "*://www.betexplorer.com/soccer/spain/laliga/results/",
+        "*://www.betexplorer.com/soccer/spain/laliga*/results/"
       ],
       "js": [
         "jquery.js",
