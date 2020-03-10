@@ -24,7 +24,8 @@
         "*://www.betexplorer.com/soccer/france/ligue-1/results/",
         "*://www.betexplorer.com/soccer/france/ligue-1*/results/",
         "*://www.betexplorer.com/soccer/spain/laliga/results/",
-        "*://www.betexplorer.com/soccer/spain/laliga*/results/"
+        "*://www.betexplorer.com/soccer/spain/laliga*/results/",
+        "*://www.betexplorer.com/soccer/spain/primera-division*/results/"
       ],
       "js": [
         "jquery.js",

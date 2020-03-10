@@ -48,7 +48,7 @@ if (url.indexOf('soccer') > 0) {
     if (url.indexOf('ligue-1') > 0) {
         league = 'ligue-1';
     }
-    if (url.indexOf('laliga') > 0) {
+    if (url.indexOf('laliga') > 0 || url.indexOf('primera-division') > 0) {
         league = 'laliga';
     }
 }
