@@ -14,7 +14,8 @@
         "*://www.betexplorer.com/soccer/czech-republic/1-liga/results/",
         "*://www.betexplorer.com/soccer/czech-republic/1-liga*/results/*",
         "*://www.betexplorer.com/soccer/czech-republic/synot-liga*/results/*",
-        "*://www.betexplorer.com/soccer/czech-republic/gambrinus-liga*/results/*"
+        "*://www.betexplorer.com/soccer/czech-republic/gambrinus-liga*/results/*",
+        "*://www.betexplorer.com/soccer/england/premier-league/results/"
       ],
       "js": [
         "jquery.js",
