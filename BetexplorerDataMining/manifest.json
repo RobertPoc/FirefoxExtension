@@ -26,7 +26,8 @@
         "*://www.betexplorer.com/soccer/spain/laliga/results/",
         "*://www.betexplorer.com/soccer/spain/laliga*/results/",
         "*://www.betexplorer.com/soccer/spain/primera-division*/results/",
-        "*://www.betexplorer.com/baseball/usa/mlb*/results/?stage*"
+        "*://www.betexplorer.com/baseball/usa/mlb*/results/?stage*",
+        "*://www.betexplorer.com/baseball/japan/npb*/results/?stage*"
       ],
       "js": [
         "jquery.js",
